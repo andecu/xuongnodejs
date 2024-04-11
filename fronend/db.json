@@ -1,0 +1,105 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Product 1",
+        "price": 100000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 1",
+        "discount": 100,
+        "quantity": 100,
+        "featured": true
+      },
+      {
+        "id": 2,
+        "name": "Product 2",
+        "price": 20000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 2",
+        "discount": 5,
+        "quantity": 80,
+        "featured": false
+      },
+      {
+        "id": 3,
+        "name": "Product 3",
+        "price": 150000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 3",
+        "discount": 0,
+        "quantity": 120,
+        "featured": true
+      },
+      {
+        "id": 4,
+        "name": "Product 4",
+        "price": 2500000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 4",
+        "discount": 10,
+        "quantity": 90,
+        "featured": false
+      },
+      {
+        "id": 5,
+        "name": "Product 5",
+        "price": 3000000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 5",
+        "discount": 0,
+        "quantity": 70,
+        "featured": true
+      },
+      {
+        "id": 6,
+        "name": "Product 6",
+        "price": 1800000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 6",
+        "discount": 8,
+        "quantity": 110,
+        "featured": false
+      },
+      {
+        "id": 7,
+        "name": "Product 7",
+        "price": 2200000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 7",
+        "discount": 0,
+        "quantity": 95,
+        "featured": true
+      },
+      {
+        "id": 8,
+        "name": "Product 8",
+        "price": 4000000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 8",
+        "discount": 15,
+        "quantity": 60,
+        "featured": false
+      },
+      {
+        "id": 9,
+        "name": "Product 9",
+        "price": 1200000,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 9",
+        "discount": 0,
+        "quantity": 150,
+        "featured": false
+      },
+      {
+        "id": 10,
+        "name": "Product 10",
+        "price": 2000008,
+        "image": "https://picsum.photos/200/300",
+        "description": "Description of Product 10",
+        "discount": 5,
+        "quantity": 85,
+        "featured": false
+      }
+    ]
+  }
+  

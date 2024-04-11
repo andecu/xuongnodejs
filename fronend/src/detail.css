@@ -1,0 +1,253 @@
+.detai-navigate {
+    background-color: #F9F1E7;
+}
+
+.detai-navigate .child {
+    margin-top: 15px;
+    display: flex;
+    height: 100px;
+    align-items: center;
+    width: 25%;
+    margin-right: 1000px;
+}
+
+.product-name {
+    border-left: 2px solid #9F9F9F;
+    height: 40px;
+    width: 150px;
+    text-align: center;
+}
+
+.product-name p {
+    margin-top: 8px;
+}
+
+.page-name {
+    color: #9F9F9F;
+}
+
+.detail-product {
+    display: flex;
+    margin-top: 50px;
+    max-width: 90%;
+}
+
+.box-left {
+    line-height: 70px;
+}
+
+.box-right {
+    width: 80%;
+    margin-left: 90px;
+}
+
+.product_name h2 {
+    font-size: 42px;
+    font-weight: 400;
+}
+
+.price {
+    margin-top: 10px;
+}
+
+.price h3 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #9F9F9F;
+}
+
+.description p {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19.5px;
+}
+
+.addToCart {
+    margin-top: 50px;
+    margin-right: 30px;
+}
+
+.addToCart,
+.selectQuantity,
+.compare,
+.add {
+    align-items: center;
+    display: flex;
+    height: 65px;
+}
+
+.selectQuantity {
+    border: 1px solid #9F9F9F;
+    width: 123px;
+    border-radius: 10px;
+}
+
+.add,
+.compare {
+    width: 215px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.child-parameter {
+    margin: 5px;
+    display: flex;
+}
+
+.child-parameter .p1 {
+    width: 80px;
+    margin: 0;
+    padding: 0;
+}
+
+.icon,
+.child-parameter p {
+    margin-left: 10px;
+    padding: 0;
+}
+
+.child-parameter a {
+    margin: 10px;
+}
+.desciption-section1 .title {
+    display: flex;
+    margin-top: 50px;
+    font-size: 24px;
+    margin-left: 300px;
+    margin-right: 300px;
+}
+
+.desciption-section1 .title h3 {
+    font-weight: 500;
+}
+
+.desciption {
+    width: 75%;
+    margin-top: 30px;
+    color: #9F9F9F;
+}
+
+.image-des {
+    width: 90%;
+    margin-top: 25px;
+    display: flex;
+}
+
+.products {
+    display: flex;
+}
+
+.card {
+    
+    margin-top: 40px;
+    margin-bottom: 45px;
+    line-height: 35px;
+    background-color: rgb(237, 241, 241);
+}
+
+.text-item,
+.discount {
+    margin-left: 10px;
+
+}
+
+.discount {
+    display: flex;
+    width: 40%;
+    gap: 10px;
+    float: left;
+}
+
+.relatedProducts h2 {
+    margin-top: 50px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 36px;
+}
+
+.more p {
+    font-weight: 600;
+    font-size: 16px;
+    color: #B88E2F;
+    border: 2px solid #B88E2F;
+    display: flex;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+}
+footer{
+    display: flex;
+    margin-top: 30px;
+    line-height: 50px;
+    font-weight: 500;
+}
+.copyright{
+    width: 92%;
+}
+.title-footer{
+    font-weight: 700;
+    font-size: 24px;
+}
+.newletter input,button{
+    outline: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin: 10px;
+}
+input::placeholder{
+    font-weight: 400;
+    color: #9F9F9F;
+}
+.card:hover .overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-content {
+    text-align: center;
+    color: #fff;
+}
+
+.overlay-content a {
+    text-decoration: none;
+    color: #B88E2F;
+    padding: 10px 10px;
+    margin: 20px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+.secondary-buttons {
+
+margin-bottom: 130px;
+}
+.overlay-content .secondary-buttons a {
+display: inline-block; /* Sử dụng display: inline-block; cho các nút trong .secondary-buttons */
+margin: 10px;
+padding: 0;
+transition: background-color 0.3s ease;
+}
+
+.secondary-buttons a {
+text-decoration: none;
+color: #fff;
+margin: 10px;
+padding: 0;
+transition: background-color 0.3s ease;
+}
