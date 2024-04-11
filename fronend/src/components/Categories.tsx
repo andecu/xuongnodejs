@@ -11,7 +11,7 @@ const Categories = () => {
 
         }
     })
-    console.log(categories)
+    
     return (
         <div>
             <div className="section1">

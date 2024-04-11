@@ -1,5 +1,6 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import Joi from "joi";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -9,54 +10,72 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
+import { productAddSchema } from "@/components/utils/validate";
+import instance from "@/configs/axios";
 import { IProduct } from "@/interfaces/product";
-import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { cateList } from "@/services/cate";
 import { addProduct } from "@/services/products";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/components/ui/use-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ChangeEvent, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-type Inputs = {
-  name: string;
-  category?: string;
-  price: number;
-  // gallery?: string[],
-  image: string;
-  description: string;
-  discount: number;
-  featured: boolean;
-  countInStock: number;
-};
+function getImageData(event: ChangeEvent<HTMLInputElement>) {
+  // FileList is immutable, so we need to create a new one
+  const dataTransfer = new DataTransfer();
 
-const productSchema = Joi.object({
-  name: Joi.string().required(),
-  price: Joi.number().required(),
-  category: Joi.string(),
-  // gallery: Joi.array().items(Joi.string()),
-  image: Joi.string(),
-  description: Joi.string(),
-  discount: Joi.number(),
-  featured: Joi.boolean(),
-  countInStock: Joi.number(),
-});
+  // Add newly uploaded images
+  Array.from(event.target.files!).forEach((image) =>
+    dataTransfer.items.add(image)
+  );
+
+  const files = dataTransfer.files;
+  const displayUrl = URL.createObjectURL(event.target.files![0]);
+
+  return { files, displayUrl };
+}
 
 const ProductAdd = () => {
   const navigate = useNavigate();
+  const [preview, setPreview] = useState("");
   const { toast } = useToast();
   const form = useForm({
-    resolver: joiResolver(productSchema),
+    resolver: joiResolver(productAddSchema),
     defaultValues: {
       name: "",
-      price: 0,
+      price: "",
       category: "",
-      // gallery: [],
       image: "",
       description: "",
-      discount: 0,
+      discount: "",
       featured: false,
-      countInStock: 0,
+    },
+  });
+
+  const { data: categoryList } = useQuery({
+    queryKey: ["category"],
+    queryFn: cateList,
+  });
+
+  const uploadImage = useMutation({
+    mutationFn: (file) => {
+      return instance.post("images/upload", file, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    onError(error: any) {
+      toast(error.message);
     },
   });
 
@@ -75,8 +94,19 @@ const ProductAdd = () => {
     },
   });
 
-  const onSubmit1: SubmitHandler<Inputs> = (product: IProduct) => {
-    mutation.mutate(product);
+  const onSubmit1 = async (product: IProduct) => {
+    if (product.image) {
+      const form = new FormData();
+      form.append("images", product.image[0]);
+      const a = await uploadImage.mutateAsync(form as any);
+      if (a.data) {
+        const imageProducts = a.data.urls[0].url as string;
+        mutation.mutate({
+          ...(product as unknown as Omit<IProduct, "_id">),
+          image: imageProducts as string,
+        });
+      }
+    }
   };
 
   return (
@@ -109,40 +139,65 @@ const ProductAdd = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="category"
-            render={({ field }) => (
+            render={({ field }: any) => (
               <FormItem>
-                <FormLabel htmlFor="category">Category</FormLabel>
-                <FormControl>
-                  <Input {...field} id="category" />
-                </FormControl>
+                <FormLabel htmlFor="Category">Category</FormLabel>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <FormControl>
+                    <SelectTrigger {...field}>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categoryList &&
+                      categoryList?.data?.map((item) => (
+                        <SelectItem key={item._id} value={item._id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div>
-            <label
-              htmlFor="countries"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Category
-            </label>
-          </div>
+          {/* shadcn ui input upload image have preview image link https://github.com/shadcn-ui/ui/issues/250*/}
           <FormField
             control={form.control}
             name="image"
-            render={({ field }) => (
+            render={({ field: { onChange, value, ...rest } }) => (
               <FormItem>
                 <FormLabel htmlFor="image">Image</FormLabel>
                 <FormControl>
-                  <Input {...field} id="image" />
+                  <Input
+                    {...rest}
+                    id="image"
+                    type="file"
+                    onChange={(event) => {
+                      const { files, displayUrl } = getImageData(event);
+                      setPreview(displayUrl);
+                      onChange(files);
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {preview && (
+            <Avatar className="w-24 h-24">
+              <AvatarImage src={preview} />
+              <AvatarFallback>BU</AvatarFallback>
+            </Avatar>
+          )}
           <FormField
             control={form.control}
             name="description"

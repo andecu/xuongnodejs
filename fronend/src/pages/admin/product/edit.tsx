@@ -7,21 +7,12 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMatch, useNavigate, useParams } from "react-router-dom";
 
+import { productUpdateSchema } from "@/components/utils/validate";
 import instance from "@/configs/axios";
 import { IProduct } from "@/interfaces/product";
 import { cateList } from "@/services/cate";
 import { editProduct, getProductById } from "@/services/products";
 import { toast } from "react-toastify";
-
-const validateForm = yup.object({
-  name: yup.string().required(),
-  description: yup.string().required(),
-  category: yup.string().required(),
-  image: yup.mixed(),
-  price: yup.string().required(),
-  discount: yup.string().required(),
-  featured: yup.boolean().required(),
-});
 
 const initiaFormState = {
   name: "",
@@ -31,7 +22,7 @@ const initiaFormState = {
   category: "",
   discount: "",
 };
-type FormData = yup.InferType<typeof validateForm>;
+type FormData = yup.InferType<typeof productUpdateSchema>;
 
 const ProductEditPage = () => {
   const { id } = useParams();
@@ -54,7 +45,7 @@ const ProductEditPage = () => {
     setValue,
   } = useForm<FormData>({
     defaultValues: initiaFormState,
-    resolver: yupResolver(validateForm),
+    resolver: yupResolver(productUpdateSchema),
   });
   const avatar = watch("image");
 
@@ -66,8 +57,7 @@ const ProductEditPage = () => {
         },
       });
     },
-    onError(error: any, variables) {
-      console.log(error, variables);
+    onError(error: any) {
       toast.error(error.message);
     },
   });
@@ -75,7 +65,7 @@ const ProductEditPage = () => {
   const hanleInputFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileName = e.target.files?.[0];
     if (fileName) {
-      // console.log(a);
+     
       setFileImage(fileName);
     }
   };
@@ -97,6 +87,7 @@ const ProductEditPage = () => {
       setValue("featured", editQuery.data.featured);
     }
   }, [editQuery.data, setValue]);
+
   const updateProductMutation = useMutation({
     mutationFn: (body: Omit<IProduct, "_id">) => {
       return editProduct({
@@ -105,21 +96,21 @@ const ProductEditPage = () => {
       });
     },
     onError(error) {
-      console.log(error);
-      // console.log(variables, "variables");
+     toast.error(error.message);
+      
     },
     onSuccess() {
       reset();
       navigate("/admin/products");
       editQuery.refetch();
-      toast.success("Cập nhật sản phẩm thành công");
+      toast.success("Sua thanh cong");
     },
   });
 
   // getCategory
 
   const { data: categoryList } = useQuery({
-    queryKey: ["getCategory"],
+    queryKey: ["category"],
     queryFn: cateList,
   });
 

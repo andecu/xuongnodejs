@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home";
 import LayoutWebsite from "./components/layouts/LayoutWebsite";
-import AboutPage from "./pages/about";
-import ContactPage from "./pages/contact";
+import AboutPage from "./pages/client/about";
+import ContactPage from "./pages/client/contact";
 import NotFound from "./pages/notFound";
 import ShopPage from "./pages/shop";
 import DetailProduct from "./pages/detail-product";
@@ -16,6 +16,8 @@ import Signin from "./pages/signin";
 import Signup from "./pages/signup";
 import ListCate from "./pages/admin/category/ListCate";
 import Addcate from "./pages/admin/category/AddCate";
+import CartList from "./pages/client/cart/CartList";
+import CheckoutPage from "./pages/client/checkout/Checkout";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/" element={<LayoutWebsite />}>
           <Route index element={<HomePage />} />
           <Route path="shop" element={<ShopPage />} />
+          <Route path="cart" element={<CartList />} />
+          <Route path="order" element={<CheckoutPage />} />
           <Route path="products/:id" element={<DetailProduct />} />
           <Route path="categories/:id" element={<CategoryDetail />} />
           <Route path="about" element={<AboutPage />} />

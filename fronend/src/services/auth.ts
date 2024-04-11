@@ -3,15 +3,9 @@ import { RegisterType, User, UserLogin } from "@/interfaces/user";
 
 export interface DataAuthResponse {
   message: string | Array<string>;
-  data: User;
-  accessToken: string;
+  userId: User;
+  token: string;
 }
-
-const accessToken: { accessToken: string; user: User } = localStorage.getItem(
-  "user"
-)
-  ? JSON.parse(localStorage.getItem("user") as string)
-  : "";
 
 const loginSubmit = async (data: UserLogin): Promise<DataAuthResponse> => {
   const response = await instance.post<DataAuthResponse>("/auth/signin", data);
@@ -26,42 +20,20 @@ const registerSubmit = async (
   return (await result).data;
 };
 
-const getAccountAdmin = async (
-  accessToken: string
-): Promise<DataAuthResponse> => {
-  const data = await instance.get<DataAuthResponse>(`/admin`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-  });
+const getAccountAdmin = async (): Promise<DataAuthResponse> => {
+  const data = await instance.get<DataAuthResponse>(`/admin`, {});
   return data.data;
 };
 
-const getUserList = async (accessToken: string) =>
-  instance.get<Omit<DataAuthResponse, "accessToken">>("/admin/userlist", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+const getUserList = async () =>
+  instance.get<Omit<DataAuthResponse, "accessToken">>("/admin/userlist", {});
 
 const deleteUser = async (id: string) => {
-  return instance.delete(id, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  return instance.delete(id, {});
 };
 
 const addUser = async (body: Omit<RegisterType, "confirmPassword">) =>
-  await instance.post<DataAuthResponse>("/signup", body, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  await instance.post<DataAuthResponse>("/signup", body, {});
 export {
   deleteUser,
   addUser,

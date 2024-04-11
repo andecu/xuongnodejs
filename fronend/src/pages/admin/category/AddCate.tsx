@@ -38,11 +38,9 @@ export default function Addcate() {
   const addProductMutation = useMutation({
     mutationFn: (body: ProductForm) => createCate({ data: body }),
     onError(error, variables) {
-      console.log(error);
-      console.log(variables, "variables");
+      toast.error(error.message);
     },
     onSuccess() {
-      // console.log(data, "data mutation");
       reset();
       toast.success("them thanh cong");
       navigate("/admin/category");
@@ -56,18 +54,16 @@ export default function Addcate() {
         id: idParams,
       });
     },
-    onError(error, variables) {
-      console.log(error);
-      console.log(variables, "variables");
+    onError(error) {
+      toast.error(error.message);
     },
     onSuccess() {
-      // console.log(data, "data mutation");
       reset();
       toast.success("Sua thanh cong");
       navigate("/admin/category");
     },
   });
-  
+
   const { data } = useQuery({
     queryKey: ["category", id],
     queryFn: () => getOneCate(id as string),
@@ -83,10 +79,8 @@ export default function Addcate() {
   const handleSubmitForm = async (data: FormData) => {
     try {
       if (isModel) {
-        const dataRes = await addProductMutation.mutateAsync(data);
-        console.log("data: ", dataRes);
+        await addProductMutation.mutateAsync(data);
       } else {
-        console.log("check mutaition :", data);
         updateProductMutation.mutate(data);
       }
     } catch (error) {

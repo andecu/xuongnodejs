@@ -1,4 +1,5 @@
 import Cart from '../models/cart'
+import Order from '../models/order'
 import Product from '../models/product'
 import User from '../models/user'
 import { StatusCodes } from 'http-status-codes'
@@ -11,7 +12,8 @@ export const getCartById = async (req, res) => {
 
         const cartData = {
             products: cart.products.map((item) => ({
-                productId: item.productId._id,
+                _id: item._id,
+                productId: item.productId,
                 name: item.productId.name,
                 quantity: item.quantity,
             }))
@@ -43,7 +45,8 @@ export const addItemToCart = async (req, res) => {
 }
 
 export const removeFromCart = async (req, res) => {
-    const { userId, productId } = req.body;
+    const { userId, productId } = req.params;
+
     try {
         let cart = await Cart.findOne({ userId });
         if (!cart) {
@@ -61,17 +64,29 @@ export const updateProductQuantity = async (req, res) => {
     const { userId, productId, quantity } = req.body;
     try {
         let cart = await Cart.findOne({ userId });
+
         if (!cart) {
             return res.status(StatusCodes.NOT_FOUND).json({ error: "Cart not found" })
         }
-       const product =  cart.products.find((item) => item.productId.toString() === productId)
-       if(!product) {
-        return res.status(StatusCodes.NOT_FOUND).json({ error: "Product not found" })
-       }
-       product.quantity = quantity;
-       await cart.save();
-       return res.status(StatusCodes.OK).json({cart});
-    } catch (error) {
 
+        const product = cart.products.find((item) => item.productId == productId)
+      
+        if (!product) {
+            return res.status(StatusCodes.NOT_FOUND).json({ error: "Product not found" })
+        }
+        product.quantity = quantity;
+        await cart.save();
+        return res.status(StatusCodes.OK).json({ cart });
+    } catch (error) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: "Internal Server Error" })
+    }
+}
+
+export const order = async (req, res) => {
+    try {
+        const order = await Order.create(req.body)
+        return res.json(order);
+    } catch (error) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: "Internal Server Error" })
     }
 }

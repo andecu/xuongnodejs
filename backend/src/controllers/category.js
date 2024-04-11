@@ -5,8 +5,7 @@ import slugify from "slugify";
 
 export const create = async (req, res) => {
     try {
-        console.log(1)
-        console.log( (req.body.slug, "-"),":dd")
+        
       const category = await Category.create({
         name: req.body.name,
         slug: slugify(req.body.name, "-"),

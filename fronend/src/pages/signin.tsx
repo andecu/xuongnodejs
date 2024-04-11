@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
 import { UserLogin } from "@/interfaces/user";
 import { loginSubmit } from "@/services/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import * as yup from "yup";
 
 const validationSchema = yup.object({
   email: yup
@@ -39,8 +39,8 @@ const Signin = () => {
         localStorage.setItem(
           "user",
           JSON.stringify({
-            user: res.data,
-            accessToken: res.accessToken,
+            userId: res?.userId,
+            accessToken: res.token,
           })
         );
 

@@ -38,9 +38,9 @@ export default function Signup() {
   const handleSubmitForm = async (data: FormData) => {
     try {
       const res = await registerSubmit(data);
-      console.log(res);
+
       if (res) {
-        toast.success("Đăng kí thành công")
+        toast.success("Đăng kí thành công");
 
         navigation("/signin");
       }
@@ -48,7 +48,6 @@ export default function Signup() {
       // const messageErr = [...errRespon, error];
       // setErrResponses(pre=>([...pre, messageErr]));
       console.log(error?.response?.data);
-      console.log(error);
     }
   };
   return (

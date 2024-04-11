@@ -1,5 +1,5 @@
 import { ICategory, cateList, deleteCate } from "@/services/cate";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,8 +8,10 @@ type ProductType = Pick<ICategory, "name" | "_id">[];
 
 export default function ListCate() {
   // get category list
+  const queryClient = useQueryClient();
+
   const { data: categoryList } = useQuery({
-    queryKey: ["getCategory"],
+    queryKey: ["category"],
     queryFn: cateList,
   });
 
@@ -26,6 +28,7 @@ export default function ListCate() {
     mutationFn: (id: string) => deleteCate({ id, accessToken }),
     onSuccess: () => {
       toast.success("Xoa thanh cong");
+      queryClient.invalidateQueries({ queryKey: ["category"] });
     },
   });
 

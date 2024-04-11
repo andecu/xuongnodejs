@@ -31,7 +31,9 @@ const Header = () => {
       <i className="fa-regular fa-user"></i>
       <i className="fas fa-search"></i>
       <i className="fa-regular fa-heart"></i>
+      <Link to={"/cart"}>
       <i className="fas fa-shopping-cart"></i>
+      </Link>
     </div>
   </header>
   )

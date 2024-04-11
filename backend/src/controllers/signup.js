@@ -64,7 +64,7 @@ export const signup = async (req, res) => {
         })
     }
     const hashedPassword = await bcryptjs.hash(password, 12);
-    console.log(hashedPassword);
+   
     const role = (await User.countDocuments({})) === 0 ? "admin" : "user"
 
     const user = await User.create({
@@ -93,7 +93,7 @@ export const signin = async (req, res) => {
 
         // Tìm người dùng trong cơ sở dữ liệu bằng email
         const user = await User.findOne({ email });
-        console.log(user, "::", password, user.password, ":::::")
+       
         // Nếu không tìm thấy người dùng, trả về lỗi "Unauthorized"
         if (!user) {
             return res.status(400).json({ message: "Khong tim thay tai khoan" })
@@ -101,7 +101,7 @@ export const signin = async (req, res) => {
 
         // So sánh mật khẩu đã nhập với mật khẩu đã được hash trong cơ sở dữ liệu
         const isPasswordValid = await bcryptjs.compare(password, user.password);
-        console.log(isPasswordValid, "::")
+        
         // Nếu mật khẩu không chính xác, trả về lỗi "Unauthorized"
         if (!isPasswordValid) {
             return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Email hoặc mật khẩu không chính xác.' });
@@ -117,7 +117,7 @@ export const signin = async (req, res) => {
         // Trả về token và thông tin người dùng
         return res.status(StatusCodes.OK).json({ token, userId: user, expiresIn: 3600 });
     } catch (error) {
-        console.error('Đã xảy ra lỗi khi đăng nhập:', error);
+       
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Đã xảy ra lỗi khi đăng nhập.' });
     }
 };

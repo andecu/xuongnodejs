@@ -1,37 +1,66 @@
 import { IProduct } from "@/interfaces/product";
-import { getAllProducts } from "@/services/products"
-import { useQuery } from "@tanstack/react-query"
-import { Link } from "react-router-dom";
+import { addtoCartUser } from "@/services/cart";
+import { getAllProducts } from "@/services/products";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type ProductListProps = {
   featured?: boolean;
   data?: IProduct[];
-}
+};
 
 const ProductList = ({ featured, data }: ProductListProps) => {
-  const { data: products, isLoading, isError } = useQuery({
+  const navigate = useNavigate();
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["PRODUCT_KEY"],
-    queryFn: getAllProducts
+    queryFn: getAllProducts,
   });
-  const filteredProducts = featured ? products?.filter((product: IProduct) => product?.featured == featured)
-      : data
-      ? data
-      : products;
 
-  if (isLoading) return <p>Loadding...</p>
-  if (isError) return <p>Error</p>
+  const filteredProducts = featured
+    ? products?.filter((product: IProduct) => product?.featured == featured)
+    : data
+    ? data
+    : products;
+
+  const handleAddToCart = (idProduct: string) => {
+    const user = localStorage.getItem("user");
+    const userExit = user ? JSON.parse(user) : null;
+    // dont login dont have in localstorage =>login
+    if (!userExit) {
+      toast.error("You Login to Order");
+      navigate("/signin");
+    }
+    addtoCartUser(1, userExit.userId._id, idProduct).then(() => {
+      toast.success("Dat hang thanh cong");
+    });
+  };
+  if (isLoading) return <p>Loadding...</p>;
+  if (isError) return <p>Error</p>;
   return (
     <div>
       <hr />
-      <div className="products" style={{display: "grid", gridTemplateColumns: "(4, 1fr)"}}>
+      <div
+        className="products"
+        style={{ display: "grid", gridTemplateColumns: "(4, 1fr)" }}
+      >
         {filteredProducts?.map((product: IProduct, index: number) => {
-          const newPrice = product.price - (product.price * (product.discount / 100));
+          const newPrice =
+            product.price - product.price * (product.discount / 100);
 
           return (
             <div className="card" key={index}>
               <div className="image-item">
                 <a href="">
-                  <img src={product?.image} alt="" style={{ width: '300px', height: '320px' }} />
+                  <img
+                    src={product?.image}
+                    alt=""
+                    style={{ width: "300px", height: "320px" }}
+                  />
                 </a>
               </div>
               <div className="text-item">
@@ -44,23 +73,40 @@ const ProductList = ({ featured, data }: ProductListProps) => {
               </div>
               <div className="overlay">
                 <div className="overlay-content">
-                  <Link to={`/products/${product._id}`} style={{ backgroundColor: '#fff' }}>View Product</Link>
-                  <a href="#" style={{ backgroundColor: '#fff' }}>Add to Cart</a>
+                  <Link
+                    to={`/products/${product._id}`}
+                    style={{ backgroundColor: "#fff" }}
+                  >
+                    View Product
+                  </Link>
+                  <a
+                    href="#"
+                    style={{ backgroundColor: "#fff" }}
+                    onClick={() => handleAddToCart(product?._id as string)}
+                  >
+                    Add to Cart
+                  </a>
                   <div className="secondary-buttons">
-                    <a href="#"><i className="fa-solid fa-share"></i> Share</a>
-                    <a href="#"><i className="fa-solid fa-code-compare"></i> Compare</a>
-                    <a href="#"><i className="fa-regular fa-heart"></i> Like</a>
+                    <a href="#">
+                      <i className="fa-solid fa-share"></i> Share
+                    </a>
+                    <a href="#">
+                      <i className="fa-solid fa-code-compare"></i> Compare
+                    </a>
+                    <a href="#">
+                      <i className="fa-regular fa-heart"></i> Like
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
-          )
+          );
         })}
       </div>
       <hr />
       {/* </div> */}
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;
